@@ -4,9 +4,9 @@
 	use Math\MovingAverage;
 	
 	$mv		=	new MovingAverage();
-	$days	=	$mv->getGraphDataDays();
-	$weeks	=	$mv->getGraphDataWeeks();
-	$months	=	$mv->getGraphDataMonths();
+	$days	=	$mv->getGraphDataDays(24);
+	$weeks	=	$mv->getGraphDataWeeks(4);
+	$months	=	$mv->getGraphDataMonths(30);
 ?>
 
 <!DOCTYPE html>

@@ -40,31 +40,31 @@ class MovingAverage
 		return round($value/$count,2);
 	}
 	
-	public function getGraphDataDays():array
+	public function getGraphDataDays(int $period=24):array
 	{
 		foreach ($this->inputDays as $dayDt=>$value)
 		{
-			$this->inputDays[$dayDt]['ma']	=	$value['sum']/24;
+			$this->inputDays[$dayDt]['ma']	=	$value['sum']/$period;
 		}
 		return $this->inputDays;
 	}
 	
-	public function getGraphDataWeeks():array
+	public function getGraphDataWeeks(int $period=7):array
 	{
 		foreach ($this->inputWeeks as $weekNumber=>$value)
 		{
 			$this->inputWeeks[$weekNumber]['avg']	=	$value['sum']/$value['dayCount'];
-			$this->inputWeeks[$weekNumber]['ma']	=	$value['sum']/7;
+			$this->inputWeeks[$weekNumber]['ma']	=	$value['sum']/$period;
 		}
 		return $this->inputWeeks;
 	}
 	
-	public function getGraphDataMonths():array
+	public function getGraphDataMonths(int $period=365):array
 	{
 		foreach ($this->inputMonths as $monthNumber=>$value)
 		{
 			$this->inputMonths[$monthNumber]['avg']	=	$value['sum']/$value['dayCount'];
-			$this->inputMonths[$monthNumber]['ma']	=	$value['sum']/30;
+			$this->inputMonths[$monthNumber]['ma']	=	$value['sum']/$period;
 		}
 		return $this->inputMonths;
 	}
