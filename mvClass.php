@@ -109,10 +109,6 @@ class MovingAverage
 					
 					$dayDate				=	strtotime(date('d.m.Y',strtotime($r[0])));
 					
-					$weekNumber				=	$this->getWeekNumber($dayDate);	
-					
-					$monthNumber			=	$this->getMonthNumber($dayDate);
-					
 					if ($prevIndex && $prevIndex!=$dayDate)
 					{
 						$this->inputDays[$prevIndex]['avg']=$this->calculateAvg($this->inputDays[$prevIndex]['sum'],$hoursCountInDay[$prevIndex]);
@@ -123,21 +119,12 @@ class MovingAverage
 					if (!isset($this->inputDays[$dayDate]))
 					{
 						$this->inputDays[$dayDate]['sum']				=	$r[1];
-						$this->inputWeeks[$weekNumber]['sum']			=	$r[1];
-						$this->inputMonths[$monthNumber]['sum']			=	$r[1];
-						
 						$hoursCountInDay[$dayDate]						=	1;
-						$this->inputWeeks[$weekNumber]['dayCount']		=	1;
-						$this->inputMonths[$monthNumber]['dayCount']	=	1;
 					}
 					else
 					{
 						$this->inputDays[$dayDate]['sum']				+=	$r[1];
 						$hoursCountInDay[$dayDate]						++;
-						$this->inputWeeks[$weekNumber]['dayCount']		++;
-						$this->inputWeeks[$weekNumber]['sum']			+=	$r[1];
-						$this->inputMonths[$monthNumber]['sum']			+=	$r[1];
-						$this->inputMonths[$monthNumber]['dayCount']	++;
 					}
 					
 					$prevIndex=$dayDate;
@@ -147,6 +134,30 @@ class MovingAverage
 				*/
 				
 				$this->inputDays[$dayDate]['avg']	=	$this->calculateAvg($this->inputDays[$dayDate]['sum'],$hoursCountInDay[$dayDate]);
+				
+				foreach ($this->inputDays as $dayDt=>$value)
+				{
+					$weekNumber=$this->getWeekNumber($dayDt);
+					
+					if (!isset($this->inputWeeks[$weekNumber]['dayCount']))
+					{
+						$this->inputWeeks[$weekNumber]['dayCount']	=	0;
+						$this->inputWeeks[$weekNumber]['sum']		=	0;
+					}
+					
+					$monthNumber=$this->getMonthNumber($dayDt);
+					if (!isset($this->inputMonths[$monthNumber]['dayCount']))
+					{
+						$this->inputMonths[$monthNumber]['dayCount']=	0;
+						$this->inputMonths[$monthNumber]['sum']		=	0;
+					}
+					
+					$this->inputWeeks[$weekNumber]['dayCount']		++;
+					$this->inputWeeks[$weekNumber]['sum']			+=	$value['avg'];
+					
+					$this->inputMonths[$monthNumber]['dayCount']	++;
+					$this->inputMonths[$monthNumber]['sum']			+=	$value['avg'];
+				}
 				
 				fclose($handle);
 			}
